@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Password Generator</h1>
+    <p>Generate strong passwords easily</p>
+
+    <form method="post">
+        <div class="input-group">
+            <label>Password Length:</label>
+            <input type="number" name="length" min="4" max="30" required>
+        </div>
+
+        <div class="options">
+            <label><input type="checkbox" name="upper"> Uppercase</label>
+            <label><input type="checkbox" name="lower"> Lowercase</label>
+            <label><input type="checkbox" name="digits"> Numbers</label>
+            <label><input type="checkbox" name="symbols"> Symbols</label>
+        </div>
+
+        <button>Generate</button>
+    </form>
+
+    {% if password %}
+    <div class="result">
+        <p id="pwd">{{ password }}</p>
+        <div class="strength-bar">
+            <div id="fill"></div>
+        </div>
+        <button onclick="copy()">Copy</button>
+        <a href="/download/{{ password }}"><button>Download</button></a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function copy(){
+    navigator.clipboard.writeText(document.getElementById("pwd").innerText);
+    alert("Password copied!");
+}
+
+// Simple strength bar
+let p = document.getElementById("pwd");
+if(p){
+    let s=0, v=p.innerText;
+    if(v.length>=8) s++;
+    if(/[A-Z]/.test(v)) s++;
+    if(/[0-9]/.test(v)) s++;
+    if(/[^A-Za-z0-9]/.test(v)) s++;
+    document.getElementById("fill").style.width=(s*25)+"%";
+}
+</script>
+
+</body>
+</html>
